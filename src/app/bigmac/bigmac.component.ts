@@ -30,7 +30,7 @@ export class BigMacComponent implements OnInit {
   { }
 
   ngOnInit() {
-    // this.localCountryName = 'The United States';
+    //this.localCountryName = 'The United States';
     const flagHolder:string = this.localStorageService.getStorage(this.cacheFlag);
     if (flagHolder != null && flagHolder === this.cacheFull){
       this.cachePopulateBigMacMap();
@@ -106,10 +106,10 @@ export class BigMacComponent implements OnInit {
 
   getRandomCountry(){
     this.randomCountry = this.bigMacMapKeys[Math.floor(Math.random() * this.bigMacMapKeys.length)];
-    const localPurchaseRatio = this.bigMacLocalPurchaseCalculator(this.randomCountry);
+    const localPurchaseRatio = this.bigMacLocalPurchaseCalculator(this.localCountryName);
     const localDollarRatio = (this.dollarPriceLookUp(this.localCountryName) / this.dollarPriceLookUp(this.randomCountry));
     this.randomCountryBigMacNumber = (localPurchaseRatio * localDollarRatio);
-    this.currencyRate =  (this.inputCurrency / localDollarRatio);
+    this.currencyRate =  (this.inputCurrency * localDollarRatio);
   }
 
   cacheCSV(key: string, value: any){
