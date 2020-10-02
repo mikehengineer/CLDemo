@@ -30,7 +30,7 @@ export class BigMacComponent implements OnInit {
   { }
 
   ngOnInit() {
-    //this.localCountryName = 'The United States';
+    this.localCountryName = 'The United States';
     const flagHolder:string = this.localStorageService.getStorage(this.cacheFlag);
     if (flagHolder != null && flagHolder === this.cacheFull){
       this.cachePopulateBigMacMap();
