@@ -32,10 +32,10 @@
                 </mat-card-header>
                 <mat-card-content id="calcCard">
                     <div id="localBigMacNumber" class="calculationCard">
-                        You could buy {{localBigMacNumber}} of Big Macs in your country.
+                        You could buy {{localBigMacNumber}} Big Macs in your country.
                     </div>
                     <div id="dollarPurchasingParity" class="calculationCard" *ngIf="dollarPurchasingParity">
-                        Your Dollar Purchasing Parity (PPP) is {{dollarPurchasingParity}}.
+                        Your Dollar Purchasing Parity (PPP) is {{dollarPurchasingParity}}
                     </div>
                 </mat-card-content>
             </div>
@@ -52,10 +52,10 @@
                 </mat-card-header>
                 <mat-card-content id="randomCalcCard">
                     <div id="randomCountryBigMacs" class="calculationCard">
-                        You could buy {{randomCountryBigMacNumber}} of Big Macs in {{randomCountry}} with {{inputCurrency}}!
+                        You could buy {{randomCountryBigMacNumber}} Big Macs in {{randomCountry}} with {{inputCurrency}}!
                     </div>
                     <div id="currencyRate" class="calculationCard">
-                        Your {{inputCurrency}} is worth about {{currencyRate}} in {{randomCountry}}
+                        Your {{inputCurrency}} is worth about {{currencyRate}} in {{randomCountry}}.
                     </div>
                     <div id="randomCountryDiv" class="calculationCard">
                         <button mat-stroked-button (click)="getRandomCountry()">Random Country</button>

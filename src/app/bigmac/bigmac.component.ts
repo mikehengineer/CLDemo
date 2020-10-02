@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BigMacService } from '../services/bigmac.services';
-import { concatMap, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LocalStorageService } from '../services/localstorage.services';
 
 @Component({
   selector: 'app-bigmac',
@@ -20,12 +21,24 @@ export class BigMacComponent implements OnInit {
   randomCountryBigMacNumber: number;
   randomLocalBigMacPurchase: number;
   currencyRate: number;
+  cacheFlag:string = 'cacheFlag';
+  cacheEmpty:string = 'cacheEmpty';
+  cacheFull:string = 'cacheFull';
+  cacheKeyArray:string = 'cacheArray';
 
-  constructor(private bigMacService: BigMacService, private currencyFormBuilder: FormBuilder) { }
+  constructor(private bigMacService: BigMacService, private currencyFormBuilder: FormBuilder, private localStorageService: LocalStorageService)
+  { }
 
   ngOnInit() {
+    // this.localCountryName = 'The United States';
+    const flagHolder:string = this.localStorageService.getStorage(this.cacheFlag);
+    if (flagHolder != null && flagHolder === this.cacheFull){
+      this.cachePopulateBigMacMap();
+    }
+    else {
+      this.httpPopulateBigMacMap();
+    }
     this.currencyBuildForm();
-    this.populateBigMacMap();
     this.bigMacService.getClientIP().pipe(take(1)).subscribe((res:any) => {
         this.bigMacService.getClientCountry('json', res.ip).pipe(take(1)).subscribe((res:any) => {
             this.localCountryName = res.data.country_name;
@@ -36,7 +49,7 @@ export class BigMacComponent implements OnInit {
       });
   }
 
-  populateBigMacMap() {
+  httpPopulateBigMacMap() {
       this.bigMacService.getAll().subscribe(data => {
         const countryList = (<string>data).split('\n');
         countryList.forEach( country => {
@@ -47,8 +60,20 @@ export class BigMacComponent implements OnInit {
           }
           this.bigMacMap.set(countryDetails[0], countryPricesArray);
           this.bigMacMapKeys.push(countryDetails[0]);
+          this.localStorageService.setStorage(countryDetails[0], countryPricesArray);
         });
+        this.localStorageService.setStorage(this.cacheKeyArray, this.bigMacMapKeys);
       });
+      this.localStorageService.setStorage(this.cacheFlag, this.cacheFull);
+  }
+
+  cachePopulateBigMacMap(){
+    this.bigMacMapKeys = this.localStorageService.getStorage(this.cacheKeyArray);
+    var i;
+    for (i = 0; i < this.bigMacMapKeys.length; i++) {
+      const bigMacCacheKey = this.bigMacMapKeys[i]
+      this.bigMacMap.set(bigMacCacheKey, this.localStorageService.getStorage(bigMacCacheKey));
+    }
   }
 
   currencyBuildForm() {
@@ -87,8 +112,24 @@ export class BigMacComponent implements OnInit {
     this.currencyRate =  (this.inputCurrency / localDollarRatio);
   }
 
+  cacheCSV(key: string, value: any){
+    this.localStorageService.setStorage(key, value);
+  }
+
+  getCachedCSV(key: string): any{
+    return this.localStorageService.getStorage(key);
+  }
+
   fancyUpUSA(america){
     let prefixUSA = 'The ';
     return prefixUSA + america;
+  }
+
+  clearCachedCSV(){
+    this.localStorageService.clearStorage();
+    this.localStorageService.setStorage(this.cacheFlag, this.cacheEmpty);
+  }
+
+  ngOnDestroy() {
   }
 }
