@@ -1,5 +1,68 @@
-<div *ngFor="let key of bigMacMapKeys">
+<div class="parent">
+    <div id="div1" class="bigMacDivider"> 
+        <mat-card class="cardContainer">
+            <div id="currencyAdder" *ngIf="localCountryName">
+                <mat-card-header>
+                    <mat-card-title>
+                        <span id="currencySpan">You are in {{localCountryName}}</span>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content id="formHolder">
+                <form id="currencyContainer" [formGroup]="currencyForm">
+                    <div class="form-group">
+                        <mat-form-field style="text-align: center" appearance="standard" hideRequiredMarker>
+                        <mat-label>Currency Amount</mat-label>
+                        <input class="formInput" matInput formControlName="currency" required>
+                        </mat-form-field>
+                    </div>
+                <button mat-stroked-button class="addButton" [disabled]="!currencyForm.valid" (click)="addCurrency()">Add</button>
+                </form>
+                </mat-card-content>
+            </div>
+        </mat-card>
+    </div>
 
-    <p> {{ bigMacMap.get(key) }}</p>
-    
-</div>
+    <div id="div2" class="bigMacDivider"> 
+        <mat-card class="cardContainer">
+            <div id="localCountry" *ngIf="localBigMacNumber">
+                <mat-card-header>
+                    <mat-card-title>
+                        <span id="localCountrySpan">Local Country Calculations</span>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content id="calcCard">
+                    <div id="localBigMacNumber" class="calculationCard">
+                        You could buy {{localBigMacNumber}} of Big Macs in your country.
+                    </div>
+                    <div id="dollarPurchasingParity" class="calculationCard" *ngIf="dollarPurchasingParity">
+                        Your Dollar Purchasing Parity (PPP) is {{dollarPurchasingParity}}.
+                    </div>
+                </mat-card-content>
+            </div>
+        </mat-card>
+    </div>
+
+    <div id="div3" class="bigMacDivider">
+        <mat-card class="cardContainer">
+            <div id="randomCountry" *ngIf="randomCountry">
+                <mat-card-header>
+                    <mat-card-title>
+                        <span id="randomCountrySpan">Random Country: {{randomCountry}}</span>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content id="randomCalcCard">
+                    <div id="randomCountryBigMacs" class="calculationCard">
+                        You could buy {{randomCountryBigMacNumber}} of Big Macs in {{randomCountry}} with {{inputCurrency}}!
+                    </div>
+                    <div id="currencyRate" class="calculationCard">
+                        Your {{inputCurrency}} is worth about {{currencyRate}} in {{randomCountry}}
+                    </div>
+                    <div id="randomCountryDiv" class="calculationCard">
+                        <button mat-stroked-button (click)="getRandomCountry()">Random Country</button>
+                    </div>
+                </mat-card-content>
+            </div>
+        </mat-card>  
+    </div>
+</div> 
+
